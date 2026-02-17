@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Philippine Income Tax Calculator 2026 | TRAIN Law</title>
+  <meta name="description" content="Free Philippine income tax calculator for 2026. Compute SSS, PhilHealth, Pag-IBIG contributions and estimated take-home pay under the TRAIN Law." />
+
+  <!-- ✅ AdSense: Replace ca-pub-XXXXXXXXXXXXXXXX with your publisher ID -->
+  <!--
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+  -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #16a34a;
+      --green-light: #22c55e;
+      --green-dark: #14532d;
+      --green-bg: #f0fdf4;
+      --green-border: #bbf7d0;
+      --card-bg: #ffffff;
+      --text: #111827;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --result-bg: #dcfce7;
+      --font: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--green-bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--green-border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--green);
+      text-decoration: none;
+    }
+    .logo span { color: var(--text); }
+
+    /* ─── AD SLOT – TOP BANNER ─── */
+    .ad-top {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      padding: 8px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      text-align: center;
+      padding: 48px 24px 32px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      color: var(--green-dark);
+      line-height: 1.2;
+    }
+    .hero h1 span { color: var(--green); }
+    .badge {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      padding: 3px 12px;
+      margin-bottom: 14px;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 10px;
+      line-height: 1.6;
+    }
+
+    /* ─── MAIN LAYOUT ─── */
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 16px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 680px) {
+      .container { grid-template-columns: 1fr; }
+    }
+
+    /* ─── CARD ─── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--green-dark);
+    }
+
+    /* ─── INPUTS ─── */
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .input-wrap {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .input-prefix {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 11px 14px 11px 38px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(22,163,74,0.15);
+      background: #fff;
+    }
+
+    /* Read-only deduction rows */
+    .deduction-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 0;
+    }
+    .deduct-box {
+      background: var(--green-bg);
+      border: 1px solid var(--green-border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .deduct-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--green-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .deduct-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-dark);
+    }
+
+    /* ─── RESULTS ─── */
+    .result-card {
+      background: var(--result-bg);
+      border: 1.5px solid var(--green-border);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .result-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      margin-bottom: 18px;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--green-border);
+      font-size: 0.92rem;
+    }
+    .result-row:last-of-type { border-bottom: none; }
+    .result-row .rlabel { color: var(--green-dark); font-weight: 500; }
+    .result-row .rvalue { font-weight: 700; color: var(--green-dark); }
+
+    @keyframes netGlow {
+      0%, 100% { box-shadow: 0 0 12px 2px rgba(34,197,94,0.5), 0 0 28px 6px rgba(34,197,94,0.25); }
+      50%       { box-shadow: 0 0 22px 6px rgba(34,197,94,0.8), 0 0 50px 14px rgba(34,197,94,0.35); }
+    }
+    .net-box {
+      background: var(--green);
+      border-radius: 12px;
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 18px;
+      animation: netGlow 2.4s ease-in-out infinite;
+    }
+    .net-box .net-label {
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .net-box .net-value {
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .tax-box {
+      background: #fa8072;
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .tax-box .tax-label { color: #fff; font-weight: 600; font-size: 0.9rem; text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+    .tax-box .tax-value { color: #fff; font-size: 1.1rem; font-weight: 800; text-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+    /* ─── AD SLOT – SIDEBAR / BOTTOM ─── */
+    .ad-side {
+      background: #fff;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 24px;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─── DISCLAIMER / NOTE ─── */
+    .note {
+      max-width: 980px;
+      margin: 0 auto 40px;
+      padding: 0 16px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 18px;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--green); text-decoration: none; }
+
+    /* ─── FAQ ─── */
+    .faq-section {
+      background: #fff;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 16px;
+    }
+    .faq-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .faq-heading {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 800;
+      color: var(--green-dark);
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .faq-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 36px;
+    }
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .faq-item {
+      border: 1.5px solid var(--green-border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--green-bg);
+      transition: border-color 0.2s;
+    }
+    .faq-item.open {
+      border-color: var(--green);
+    }
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--green-dark);
+      text-align: left;
+      transition: background 0.2s;
+    }
+    .faq-q:hover { background: #d1fae5; }
+    .faq-icon {
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--green);
+      flex-shrink: 0;
+      transition: transform 0.3s;
+      line-height: 1;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.3s ease;
+      padding: 0 20px;
+    }
+    .faq-item.open .faq-a {
+      max-height: 600px;
+      padding: 4px 20px 18px;
+    }
+    .faq-a p {
+      font-size: 0.9rem;
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .faq-a p:last-child { margin-bottom: 0; }
+    .faq-a ul {
+      margin: 8px 0 10px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .faq-a ul li {
+      font-size: 0.88rem;
+      color: #374151;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <a class="logo" href="#"><span>PH</span>TaxCalc</a>
+  <span style="font-size:0.8rem;color:var(--muted);">Updated for 2026 | TRAIN Law</span>
+</header>
+
+<!-- Top Banner Ad Slot -->
+<div class="ad-top">
+  <!-- AdSense Leaderboard 728×90 -->
+  <!--
+  <ins class="adsbygoogle"
+       style="display:inline-block;width:728px;height:90px"
+       data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+       data-ad-slot="XXXXXXXXXX"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  -->
+  Advertisement
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="badge">Free · No signup needed</div>
+  <h1>Philippine <span>Income Tax</span> Calculator</h1>
+  <p>Compute your SSS, PhilHealth, Pag-IBIG contributions and estimated monthly take-home pay under the TRAIN Law — instantly.</p>
+</div>
+
+<!-- Calculator -->
+<div class="container">
+
+  <!-- LEFT: Input + Deductions -->
+  <div>
+    <div class="card">
+      <p class="card-title">Monthly Gross Salary</p>
+      <div class="input-wrap">
+        <span class="input-prefix">₱</span>
+        <input
+          type="number"
+          id="salary"
+          placeholder="e.g. 30000"
+          min="0"
+          step="500"
+          oninput="calculate()"
+        />
+      </div>
+
+      <p class="card-title" style="margin-top:4px;">Mandatory Deductions</p>
+      <div class="deduction-grid">
+        <div class="deduct-box">
+          <div class="deduct-label">SSS</div>
+          <div class="deduct-value" id="sssVal">₱ 0.00</div>
+        </div>
+        <div class="deduct-box">
+          <div class="deduct-label">PhilHealth</div>
+          <div class="deduct-value" id="phVal">₱ 0.00</div>
+        </div>
+        <div class="deduct-box">
+          <div class="deduct-label">Pag-IBIG</div>
+          <div class="deduct-value" id="pagibigVal">₱ 0.00</div>
+        </div>
+        <div class="deduct-box">
+          <div class="deduct-label">Total Deductions</div>
+          <div class="deduct-value" id="totalDeduct">₱ 0.00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ad Slot – Rectangle -->
+    <div class="ad-side">
+      <!-- AdSense 300×250 -->
+      <!--
+      <ins class="adsbygoogle"
+           style="display:block;width:300px;height:250px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      Ad Space (300×250)
+    </div>
+  </div>
+
+  <!-- RIGHT: Results -->
+  <div class="result-card">
+    <p class="result-title">📊 Tax Computation</p>
+
+    <div class="result-row">
+      <span class="rlabel">Gross Monthly Salary</span>
+      <span class="rvalue" id="rGross">₱ 0.00</span>
+    </div>
+    <div class="result-row">
+      <span class="rlabel">SSS Contribution</span>
+      <span class="rvalue" id="rSSS">₱ 0.00</span>
+    </div>
+    <div class="result-row">
+      <span class="rlabel">PhilHealth (employee share)</span>
+      <span class="rvalue" id="rPH">₱ 0.00</span>
+    </div>
+    <div class="result-row">
+      <span class="rlabel">Pag-IBIG</span>
+      <span class="rvalue" id="rPagibig">₱ 0.00</span>
+    </div>
+    <div class="result-row">
+      <span class="rlabel">Taxable Income</span>
+      <span class="rvalue" id="rTaxable">₱ 0.00</span>
+    </div>
+
+    <div class="tax-box">
+      <span class="tax-label">Monthly Income Tax (TRAIN)</span>
+      <span class="tax-value" id="rTax">₱ 0.00</span>
+    </div>
+
+    <div class="net-box">
+      <span class="net-label">Estimated Net Pay</span>
+      <span class="net-value" id="rNet">₱ 0.00</span>
+    </div>
+
+    <!-- Tax bracket note -->
+    <p id="taxNote" style="font-size:0.77rem;color:var(--green-dark);margin-top:14px;line-height:1.5;"></p>
+
+    <!-- Ad Slot inside results -->
+    <div class="ad-side" style="margin-top:20px;">
+      <!-- AdSense 300×250 -->
+      <!--
+      <ins class="adsbygoogle"
+           style="display:block;width:300px;height:250px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      Ad Space (300×250)
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <h2 class="faq-heading">Frequently Asked Questions</h2>
+    <p class="faq-sub">Everything you need to know about Philippine income tax and mandatory contributions.</p>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What is the TRAIN Law? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>The Tax Reform for Acceleration and Inclusion (TRAIN) Law, or Republic Act 10963, took effect on January 1, 2018. It overhauled the Philippine personal income tax system by raising the tax-exempt threshold, adjusting tax brackets, and simplifying tax rates. Under TRAIN, employees earning ₱250,000 or less annually pay <strong>zero income tax</strong>.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How is my monthly income tax computed? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Your taxable income is your gross salary minus your SSS, PhilHealth, and Pag-IBIG contributions. The taxable income is then annualized (multiplied by 12) and applied to the TRAIN Law tax table:</p>
+          <ul>
+            <li>₱0 – ₱250,000 → <strong>0%</strong></li>
+            <li>₱250,001 – ₱400,000 → <strong>15%</strong> of excess over ₱250,000</li>
+            <li>₱400,001 – ₱800,000 → ₱22,500 + <strong>20%</strong> of excess over ₱400,000</li>
+            <li>₱800,001 – ₱2,000,000 → ₱102,500 + <strong>25%</strong> of excess over ₱800,000</li>
+            <li>₱2,000,001 – ₱8,000,000 → ₱402,500 + <strong>30%</strong> of excess over ₱2,000,000</li>
+            <li>Over ₱8,000,000 → ₱2,202,500 + <strong>35%</strong> of excess over ₱8,000,000</li>
+          </ul>
+          <p>The resulting annual tax is divided by 12 to get your monthly withholding tax.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How is SSS contribution computed in 2026? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>The SSS contribution is based on your <strong>Monthly Salary Credit (MSC)</strong> — a bracketed figure derived from your actual salary. The employee share is <strong>5%</strong> of the MSC. The minimum MSC is ₱5,000 and the maximum is ₱35,000, meaning the maximum employee SSS contribution is <strong>₱1,750/month</strong>. Your employer also pays a separate share on top of this.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How is PhilHealth computed? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Starting 2026, the PhilHealth premium rate is <strong>5% of your basic monthly salary</strong>, shared equally between employee and employer (2.5% each). The salary floor is ₱10,000 and the ceiling is ₱100,000, so the minimum employee share is <strong>₱250/month</strong> and the maximum is <strong>₱2,500/month</strong>.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How much is Pag-IBIG (HDMF)? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>For most employees, the Pag-IBIG contribution is <strong>2% of monthly salary</strong>, but the employee share is capped at <strong>₱100/month</strong>. Your employer matches this with an additional 2% contribution. Voluntary contributions above the minimum are allowed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Are 13th month pay and bonuses taxable? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>Under the TRAIN Law, <strong>13th month pay and other bonuses are tax-exempt up to ₱90,000</strong> per year. Any amount exceeding ₱90,000 will be added to your taxable income and taxed at the regular rates. This calculator computes your regular monthly salary only and does not include 13th month pay.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What if I'm a self-employed or mixed-income earner? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>This calculator is designed for <strong>purely compensation income earners</strong> (regular employees). If you are self-employed, a freelancer, or a mixed-income earner, your tax computation is different — you may deduct business expenses and choose between the optional standard deduction (OSD) of 40% or itemized deductions. It is best to consult a CPA or BIR for guidance.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Is this calculator accurate? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">
+          <p>This tool provides a <strong>good estimate</strong> for most regular employees with a fixed monthly salary. However, it does not account for other taxable benefits, mid-year salary changes, late SSS bracket updates, or employer-specific payroll practices. For official payroll computation, always verify with your HR department or a licensed accountant.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Disclaimer -->
+<p class="note">
+  This calculator is for <strong>estimation purposes only</strong> and is based on the TRAIN Law (RA 10963) and 2026 SSS, PhilHealth, and Pag-IBIG rates.
+  Actual taxes may vary depending on other deductions, 13th month pay, and year-end adjustments.
+  Always consult with a licensed accountant or HR professional for official payroll computation.
+</p>
+
+<!-- Footer -->
+<footer>
+  &copy; 2026 PHTaxCalc &nbsp;|&nbsp; <a href="#">Privacy Policy</a> &nbsp;|&nbsp; <a href="#">Contact</a>
+  <br />Data sources: BIR TRAIN Law, SSS Circular 2024-007, PhilHealth Advisory 2025-0002
+</footer>
+
+<script>
+  // ─── HELPERS ───────────────────────────────────────────────
+  const peso = n => '₱ ' + n.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  // ─── SSS 2026 ───────────────────────────────────────────────
+  // Employee share = 5% of MSC
+  // MSC = salary rounded to bracket; floor ₱5,000, ceiling ₱35,000
+  // Bracket spacing: ₱500 increments
+  // Range of compensation: up to ₱5,249.99 → MSC 5,000
+  //                        ₱5,250–₱5,749.99 → MSC 5,500 … etc.
+  function computeSSS(salary) {
+    const MIN_MSC = 5000;
+    const MAX_MSC = 35000;
+    if (salary < 5000) return MIN_MSC * 0.05; // below floor, use min MSC
+    if (salary >= 34750) return MAX_MSC * 0.05;
+    // Bracket: MSC = round to nearest 500 (lower bound of 500-wide bracket)
+    // Range midpoint is MSC + 249.99
+    // salary < MSC+250 → MSC; salary >= MSC+250 → MSC+500
+    let msc = Math.floor((salary + 250) / 500) * 500;
+    msc = Math.max(MIN_MSC, Math.min(MAX_MSC, msc));
+    return msc * 0.05;
+  }
+
+  // ─── PhilHealth 2026 ─────────────────────────────────────────
+  // Total premium = 5% of salary; floor salary ₱10,000, ceiling ₱100,000
+  // Employee pays 50% of total premium
+  function computePhilHealth(salary) {
+    const base = Math.min(Math.max(salary, 10000), 100000);
+    const totalPremium = base * 0.05;
+    return totalPremium / 2; // employee share
+  }
+
+  // ─── Pag-IBIG ─────────────────────────────────────────────
+  // Employee: 2% of salary, capped at ₱100/month
+  function computePagibig(salary) {
+    return Math.min(salary * 0.02, 100);
+  }
+
+  // ─── TRAIN Law Income Tax (monthly, 2023 onward) ───────────
+  // Annual taxable income brackets → annual tax → divide by 12
+  function computeTax(monthlyTaxable) {
+    const annual = monthlyTaxable * 12;
+    let annualTax = 0;
+    let note = '';
+
+    if (annual <= 250000) {
+      annualTax = 0;
+      note = 'Your annual taxable income is ₱250,000 or below — income tax is ₱0 under the TRAIN Law.';
+    } else if (annual <= 400000) {
+      annualTax = (annual - 250000) * 0.15;
+      note = 'Tax bracket: 15% on excess over ₱250,000.';
+    } else if (annual <= 800000) {
+      annualTax = 22500 + (annual - 400000) * 0.20;
+      note = 'Tax bracket: ₱22,500 + 20% on excess over ₱400,000.';
+    } else if (annual <= 2000000) {
+      annualTax = 102500 + (annual - 800000) * 0.25;
+      note = 'Tax bracket: ₱102,500 + 25% on excess over ₱800,000.';
+    } else if (annual <= 8000000) {
+      annualTax = 402500 + (annual - 2000000) * 0.30;
+      note = 'Tax bracket: ₱402,500 + 30% on excess over ₱2,000,000.';
+    } else {
+      annualTax = 2202500 + (annual - 8000000) * 0.35;
+      note = 'Tax bracket: ₱2,202,500 + 35% on excess over ₱8,000,000.';
+    }
+
+    return { monthly: annualTax / 12, note };
+  }
+
+  // ─── MAIN CALCULATE ───────────────────────────────────────
+  function calculate() {
+    const salary = parseFloat(document.getElementById('salary').value) || 0;
+
+    const sss     = salary > 0 ? computeSSS(salary) : 0;
+    const ph      = salary > 0 ? computePhilHealth(salary) : 0;
+    const pagibig = salary > 0 ? computePagibig(salary) : 0;
+    const totalD  = sss + ph + pagibig;
+
+    const taxable = Math.max(salary - totalD, 0);
+    const { monthly: tax, note } = computeTax(taxable);
+    const net = salary - totalD - tax;
+
+    // Left card
+    document.getElementById('sssVal').textContent    = peso(sss);
+    document.getElementById('phVal').textContent     = peso(ph);
+    document.getElementById('pagibigVal').textContent= peso(pagibig);
+    document.getElementById('totalDeduct').textContent = peso(totalD);
+
+    // Right card
+    document.getElementById('rGross').textContent   = peso(salary);
+    document.getElementById('rSSS').textContent     = peso(sss);
+    document.getElementById('rPH').textContent      = peso(ph);
+    document.getElementById('rPagibig').textContent = peso(pagibig);
+    document.getElementById('rTaxable').textContent = peso(taxable);
+    document.getElementById('rTax').textContent     = peso(tax);
+    document.getElementById('rNet').textContent     = peso(Math.max(net, 0));
+    document.getElementById('taxNote').textContent  = salary > 0 ? note : '';
+  }
+
+  // ─── FAQ ACCORDION ─────────────────────────────────────────
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+</script>
+</body>
+</html>
